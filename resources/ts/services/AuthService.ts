@@ -1,8 +1,7 @@
 import http from './Axios';
-import httpToken from './AxiosToken';
 import { Login } from '../interfaces';
-
-class AuthService {
+import Services from './Services'
+class AuthService extends Services {
 
     login(userLogin: Login): Promise<any> {
         return new Promise((resolve, reject) => {
@@ -25,17 +24,16 @@ class AuthService {
         };
     }
 
-    logout(): Promise<any> {
+    logout(token: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            httpToken
-            .post(`logout`)
-            .then(response => resolve(response.data as any))
-            .catch(error => {
-                reject(error);
-            });
+            http
+                .post(`logout`,{}, this.getHeader(token))
+                .then(response => resolve(response.data as any))
+                .catch(error => {
+                    reject(error);
+                });
         });
     }
-
 
     adminLogin(userLogin: Login): Promise<any> {
         return new Promise((resolve, reject) => {

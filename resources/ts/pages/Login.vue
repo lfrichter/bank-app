@@ -47,17 +47,18 @@
 <script lang="ts">
 import { Login } from '../interfaces';
 import { AuthService } from '../services';
-import { state } from '../state/index'
-import { defineComponent, ref, onMounted, watch, watchEffect, shallowRef, triggerRef} from 'vue'
+import { defineComponent, ref, onMounted, watch, watchEffect, shallowRef, triggerRef, computed} from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { store } from '../store/vuex';
 
 export default defineComponent({
     name: 'Login',
     setup(props, context){
+        const store = useStore()
         const formData = ref(AuthService.getLoginForm());
         let errors = shallowRef({ messages: [] })
         let displayErrors = shallowRef({active: false});
-        const currentState = ref(state);
         const router = useRouter();
 
         function handleSubmit(e: any) {
@@ -65,10 +66,8 @@ export default defineComponent({
             AuthService.login(formData.value as Login)
                 .then(async response => {
                     if(response.success){
-                        currentState.value.setAuthentication(response.user, response.token)
-                        if(currentState.value.token !== null){
-                            router.push('/dashboard')
-                        }
+                        store.dispatch('setLogin', { user: response.user, token: response.token, admin: false })
+                        router.push({ path: '/balance', name: 'Balance'})
                     }else{
                         displayErrors.value.active = true
                         triggerRef(displayErrors)
@@ -103,13 +102,12 @@ export default defineComponent({
             displayErrors,
             handleSubmit,
             closeError
-
         }
 
     },
     beforeRouteEnter(to, from, next) {
-        if (state.authenticated) {
-            return next('dashboard')
+        if (store.state.authenticated) {
+            return next('balance')
         }
         next()
     }

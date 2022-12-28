@@ -55,7 +55,6 @@
 <script lang="ts">
 import { Register } from '../interfaces';
 import { RegisterService } from '../services';
-import { state } from '../state/index'
 import { defineComponent, ref, onMounted, watch, watchEffect, shallowRef, triggerRef} from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -65,7 +64,6 @@ export default defineComponent({
         const formData = ref(RegisterService.getNewRegisterForm());
         let errors = shallowRef({ messages: [] })
         let displayErrors = shallowRef({active: false});
-        const currentState = ref(state);
         const router = useRouter();
 
         function handleSubmit(e: any) {
@@ -100,7 +98,6 @@ export default defineComponent({
         })
 
         onMounted(() => {
-            console.log(currentState.value)
         })
 
         return {

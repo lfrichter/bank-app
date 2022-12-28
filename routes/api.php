@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\BalanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,4 +20,5 @@ Route::post('register', [UserController::class, 'register']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [UserController::class, 'logout']);
+    Route::get('balance', [BalanceController::class, 'balance']);
 });

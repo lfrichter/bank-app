@@ -12,29 +12,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, watch} from 'vue'
-import { state } from '../state/index'
+import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 export default defineComponent({
     name: 'Home',
     setup(){
+        const store = useStore()
         const router = useRouter()
-        const currentState = ref(state)
 
         return {
             router,
-            currentState
+            store
         }
-    },
-    beforeRouteEnter(to, from, next) {
-        if (!state.authenticated) {
-            return next('/login')
-        }
-        if (state.admin) {
-            return next('/admin')
-        }
-        next();
     }
 })
 </script>

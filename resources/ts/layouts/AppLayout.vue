@@ -41,7 +41,7 @@
 
                         <div class="flex space-x-4" v-if="state.authenticated">
                             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                            <router-link :to="{name: 'Dashboard'}" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Balance</router-link>
+                            <router-link :to="{name: 'Balance'}" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Balance</router-link>
                             <a href="#"  @click="logout" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" style="cursor: pointer;">Logout</a>
                         </div>
 
@@ -100,7 +100,7 @@
 
                 <div class="space-y-1 px-2 pt-2 pb-3" v-if="state.authenticated">
                     <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                    <router-link :to="{name: 'Dashboard'}" class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium" aria-current="page">Balance</router-link>
+                    <router-link :to="{name: 'Balance'}" class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium" aria-current="page">Balance</router-link>
                     <a href="#"  @click="logout" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" style="cursor: pointer;">Logout</a>
                 </div>
 
