@@ -13,8 +13,7 @@ class CheckController extends Controller
 
   public function checks(Request $request)
   {
-
-    $checks = Check::where('user_id', Auth::id());
+    $checks = Check::query();
 
     if ($request->has('status')) {
         $status = $request->input('status');
