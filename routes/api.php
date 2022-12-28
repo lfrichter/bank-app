@@ -2,7 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\CheckController;
 use App\Http\Controllers\Api\BalanceController;
+use App\Http\Controllers\Api\PurchaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,5 +23,10 @@ Route::post('register', [UserController::class, 'register']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [UserController::class, 'logout']);
+    Route::post('purchase', [PurchaseController::class, 'purchase']);
     Route::get('balance', [BalanceController::class, 'balance']);
+    Route::get('checks', [CheckController::class, 'checks']);
+    Route::post('deposit', [CheckController::class, 'deposit']);
+    Route::get('currentBalance', [BalanceController::class, 'currentBalance']);
+    Route::get('expenses', [BalanceController::class, 'expenses']);
 });

@@ -39,9 +39,11 @@
                     </div>
                     <div class="hidden sm:ml-6 sm:block">
 
-                        <div class="flex space-x-4" v-if="state.authenticated">
+                        <div class="flex space-x-4" v-if="store.state.authenticated">
                             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                             <router-link :to="{name: 'Balance'}" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Balance</router-link>
+                            <router-link :to="{name: 'Expenses'}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Expenses</router-link>
+                            <router-link :to="{name: 'Checks'}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Checks</router-link>
                             <a href="#"  @click="logout" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" style="cursor: pointer;">Logout</a>
                         </div>
 
@@ -98,9 +100,11 @@
             <div :class="[mobile_menu_open ? 'sm' : 'hidden', 'md:hidden', 'lg:hidden']" id="mobile-menu">
 
 
-                <div class="space-y-1 px-2 pt-2 pb-3" v-if="state.authenticated">
+                <div class="space-y-1 px-2 pt-2 pb-3" v-if="store.state.authenticated">
                     <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                     <router-link :to="{name: 'Balance'}" class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium" aria-current="page">Balance</router-link>
+                    <router-link :to="{name: 'Expenses'}" class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium" aria-current="page">Expenses</router-link>
+                    <router-link :to="{name: 'Checks'}" class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium" aria-current="page">Checks</router-link>
                     <a href="#"  @click="logout" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" style="cursor: pointer;">Logout</a>
                 </div>
 
@@ -113,7 +117,7 @@
 
 
                 <!-- <div class="space-y-1 px-2 pt-2 pb-3">
-                <a href="#" class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium" aria-current="page">Dashboard</a>
+                <a href="#" class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium" aria-current="page">Balance</a>
                 <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Team</a>
                 <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Projects</a>
                 <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Calendar</a>
@@ -124,19 +128,19 @@
 </template>
 
 <script lang="ts">
-import { AuthService } from '../services';
-import { state } from '../state/index'
 import { defineComponent, ref, onMounted} from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 export default defineComponent({
     name: 'AppLayout',
+    emits: ['goLogout'],
     setup(props, context){
+        const store = useStore()
+        const router = useRouter();
         let mobile_menu_open = ref(true)
         let mobile_class = ref('block')
         let authenticated = ref("")
-        const currentState = ref(state);
-        const router = useRouter();
 
         function mobileMenuOpenClose() {
             mobile_menu_open.value = !mobile_menu_open.value
@@ -145,43 +149,22 @@ export default defineComponent({
 
         function logout(e: any) {
             e.preventDefault()
-            AuthService.logout()
-                .then(response => {
-                    if(response.success){
-                        currentState.value.setLogoff()
-                        router.push('/login')
-                    }else{
-                       console.log(response)
-                    }
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
+            context.emit('goLogout');
         }
 
-
         onMounted(() => {
-            // authenticated.value = currentState.value.authenticated;
         })
 
         return {
             mobile_menu_open,
             mobile_class,
             authenticated,
-            currentState,
+            store,
             router,
-            state,
             mobileMenuOpenClose,
             logout
-
         }
 
-    },
-    beforeRouteEnter(to, from, next) {
-        if (state.authenticated) {
-            return next('dashboard')
-        }
-        next()
     }
 })
 </script>

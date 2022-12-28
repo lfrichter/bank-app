@@ -1,5 +1,5 @@
 import http from './Axios';
-import { User, Register } from '../interfaces';
+import { Register } from '../interfaces';
 
 class RegisterService {
 
