@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CheckController;
 use App\Http\Controllers\Api\BalanceController;
 use App\Http\Controllers\Api\PurchaseController;
+use App\Http\Controllers\Api\Admin\AuthController;
+use App\Http\Controllers\Api\Admin\CheckController as AdminCheckController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,3 +32,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('currentBalance', [BalanceController::class, 'currentBalance']);
     Route::get('expenses', [BalanceController::class, 'expenses']);
 });
+
+Route::name('admin.')->prefix('admin')->group(function () {
+    Route::post('login', [AuthController::class, 'login'])->name('login');
+
+    Route::middleware(['auth:sanctum','auth.admin'])->group(function () {
+        Route::get('getUser', [AuthController::class, 'getUser'])->name('getUser');
+        Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+        Route::get('checks/{check}', [AdminCheckController::class, 'get']);
+        Route::put('checks/{check}', [AdminCheckController::class, 'update']);
+    });
+});
+
+
+
+

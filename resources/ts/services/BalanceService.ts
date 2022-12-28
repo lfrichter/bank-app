@@ -47,6 +47,28 @@ class BalanceService extends Services{
             });
         });
     }
+
+    getCheckDetail(id: any, token: string): Promise<Check> {
+        return new Promise(async (resolve, reject) => {
+            await http
+            .get(`admin/checks/${id}`, this.getHeader(token))
+            .then(response => resolve(response.data as Check))
+            .catch(error => {
+                reject(error);
+            });
+        });
+    }
+
+    updateCheck(id: any, status: string, token: string): Promise<Check> {
+        return new Promise((resolve, reject) => {
+            http
+            .put(`admin/checks/${id}`, {status: status}, this.getHeader(token))
+            .then(response => resolve(response.data as Check))
+            .catch(error => {
+                reject(error);
+            });
+        });
+    }
 }
 
 export default new BalanceService();
