@@ -26,6 +26,7 @@ export default defineConfig({
         }),
         laravel([
             'resources/ts/app.ts',
+            'resources/css/app.css',
         ]),
     ],
 });
