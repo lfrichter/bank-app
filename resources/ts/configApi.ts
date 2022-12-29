@@ -1,4 +1,4 @@
 export default {
-  rootApiUrl: 'http://'+ window.location.host +'/api',
+  rootApiUrl: window.location.protocol + '//'+ window.location.host +'/api',
   apiVersion: 1,
 };

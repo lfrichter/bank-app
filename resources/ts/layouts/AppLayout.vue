@@ -28,14 +28,7 @@
                 </div>
                 <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                     <div class="flex flex-shrink-0 items-center">
-                    <!-- <img class="block h-8 w-auto lg:hidden" src="/images/logo.png" alt="logo">
-                    <img class="hidden h-8 w-auto lg:block" src="/images/logo.png" alt="logo"> -->
-                    <img class="block h-10 w-auto lg:hidden" src="/images/logo.svg?color=indigo&shade=500" alt="Bank">
-                    <img class="hidden h-10 w-auto lg:block" src="/images/logo.svg?color=indigo&shade=500" alt="Bank">
-                     <!-- <img class="block h-8 w-auto lg:hidden" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company">
-                    <img class="hidden h-8 w-auto lg:block" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company"> -->
-
-
+                        <logo-asset></logo-asset>
                     </div>
                     <div class="hidden sm:ml-6 sm:block">
 
@@ -131,16 +124,19 @@
 import { defineComponent, ref, onMounted} from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import LogoAsset from '../components/LogoAsset.vue'
 
 export default defineComponent({
     name: 'AppLayout',
     emits: ['goLogout'],
+    components: { LogoAsset },
     setup(props, context){
         const store = useStore()
         const router = useRouter();
         let mobile_menu_open = ref(true)
         let mobile_class = ref('block')
         let authenticated = ref("")
+        const domain = window.location.protocol + '//'+ window.location.host
 
         function mobileMenuOpenClose() {
             mobile_menu_open.value = !mobile_menu_open.value
@@ -150,6 +146,10 @@ export default defineComponent({
         function logout(e: any) {
             e.preventDefault()
             context.emit('goLogout');
+        }
+
+        function addAsset(file: string) {
+            return domain + file
         }
 
         onMounted(() => {
@@ -162,7 +162,8 @@ export default defineComponent({
             store,
             router,
             mobileMenuOpenClose,
-            logout
+            logout,
+            addAsset
         }
 
     }
