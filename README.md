@@ -22,7 +22,7 @@ To prepare an evironment local suitable to deployment, check it out these versio
 3. `composer run-script post-create-project-cmd`
 4. At the file `.env`
 	1. Set proper database name in attribute `DB_DATABASE=`
-	2. Update `APP_URL=` and `SANCTUM_STATEFUL_DOMAINS=` with correct URL according your server definition
+	2. Update `APP_URL=`, `SANCTUM_STATEFUL_DOMAINS=` and `VITE_APP_URL=` with correct URL according your server definition
 5. `php artisan migrate && php artisan db:seed`
 6. `npm install && npm run dev` or `yarn && yarn dev`
 
