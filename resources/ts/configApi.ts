@@ -1,4 +1,6 @@
+// const appUrl = import.meta.env.VITE_APP_URL;
+const appUrl = process.env.VITE_APP_URL;
 export default {
-  rootApiUrl: window.location.protocol + '//'+ window.location.host +'/api',
+  rootApiUrl: appUrl +'/api',
   apiVersion: 1,
 };
