@@ -14,10 +14,39 @@ jobs:
       - name: Checkout the files
         uses: actions/checkout@v2
 
-      - name: Deploy to Server 1
-        uses: easingthemes/ssh-deploy@main
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.HOST_DNS }}
-          REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: ${{ secrets.TARGET_DIR }}
+      # - name: Deploy to Server 1
+      #   uses: easingthemes/ssh-deploy@main
+      #   env:
+      #     SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+      #     REMOTE_HOST: ${{ secrets.HOST_DNS }}
+      #     REMOTE_USER: ${{ secrets.USERNAME }}
+      #     TARGET: ${{ secrets.TARGET_DIR }}
+
+      # - name: Wipe Project Dir
+      #   uses: garygrossgarten/github-action-ssh@release
+      #   with:
+      #     command: rm -rf public_html/*;
+      #     host: ${{secrets.SSH_HOST}}
+      #     username: ${{secrets.SSH_USERNAME}}
+      #     passphrase: ${{secrets.SSH_PASSWORD}}
+      #     privateKey: ${{secrets.SSH_PRIVATE_KEY}}
+      #     port: ${{secrets.SSH_PORT}}
+      # - name: FTP Deploy API
+      #   uses: kevinpainchaud/simple-ftp-deploy-action@v1.1.0
+      #   with:
+      #     ftp_host: example.com
+      #     ftp_username: ftp@example.com
+      #     ftp_password: ${{secrets.FTP_PASSWORD}}
+      #     local_source_dir: "/github/workspace/laravel-app"
+      #     dist_target_dir: "/laravel-app"
+      #     delete: "false"
+      #     exclude: "'^tests/'"
+      - name: Run Post Deploy Script
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: cd /var/www/bank; chmod 755 ./start.sh; chmod o+x ./start.sh; ./start.sh; exit;
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USERNAME}}
+          passphrase: ${{secrets.SSH_PASSWORD}}
+          privateKey: ${{secrets.SSH_PRIVATE_KEY}}
+          port: ${{secrets.SSH_PORT}}
