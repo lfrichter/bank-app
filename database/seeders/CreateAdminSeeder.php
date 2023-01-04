@@ -16,13 +16,17 @@ class CreateAdminSeeder extends Seeder
      */
     public function run()
     {
-        $admin = [
+        $data = [
             'name' => 'Admin',
             'email' => 'admin@bnb.com',
-            'password' => Hash::make('12345678'),
         ];
 
-        $admin = Admin::firstOrCreate($admin);
+        $admin = Admin::firstOrNew($data);
+
+        if (!$admin->exists) {
+            $admin->password = Hash::make('12345678');
+            $admin->save();
+        }
 
         if($admin->wasRecentlyCreated){
             echo 'Admin was created' . PHP_EOL;
