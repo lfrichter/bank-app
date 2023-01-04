@@ -38,7 +38,7 @@ class CheckObserver
         if($check->status === 'accepted'){
             try{
                 $balance = new Balance();
-                $currentBalance = $balance->getCurrentBalance();
+                $currentBalance = $balance->getCurrentBalance($check->user_id);
                 $balance->create([
                     'current_balance' => $currentBalance->current_balance+$check->amount,
                     'user_id' => $check->user_id,

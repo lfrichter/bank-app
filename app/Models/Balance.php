@@ -22,8 +22,9 @@ class Balance extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getCurrentBalance()
+    public function getCurrentBalance($user_id = null)
     {
-        return  Balance::where('user_id', Auth::id())->latest()->orderByDesc('id')->first();
+        $user_id = is_null($user_id) ? Auth::id() : $user_id;
+        return  Balance::where('user_id', $user_id)->latest()->orderByDesc('id')->first();
     }
 }

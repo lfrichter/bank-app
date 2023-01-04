@@ -48,6 +48,18 @@ class BalanceService extends Services{
         });
     }
 
+
+    getAdminChecks(monthYear: any, token: string): Promise<Checks> {
+        return new Promise((resolve, reject) => {
+            http
+            .get(`admin/checks?` +  new URLSearchParams(monthYear).toString(), this.getHeader(token))
+            .then(response => resolve(response.data as Checks))
+            .catch(error => {
+                reject(error);
+            });
+        });
+    }
+
     getCheckDetail(id: any, token: string): Promise<Check> {
         return new Promise(async (resolve, reject) => {
             await http

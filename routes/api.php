@@ -39,6 +39,7 @@ Route::name('admin.')->prefix('admin')->group(function () {
     Route::middleware(['auth:sanctum','auth.admin'])->group(function () {
         Route::get('getUser', [AuthController::class, 'getUser'])->name('getUser');
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+        Route::get('checks', [AdminCheckController::class, 'index']);
         Route::get('checks/{check}', [AdminCheckController::class, 'get']);
         Route::put('checks/{check}', [AdminCheckController::class, 'update']);
     });

@@ -65,7 +65,7 @@ export default defineComponent({
         }
 
         function getChecks() {
-            BalanceService.getChecks(month.value, store.state.token)
+            BalanceService.getAdminChecks(month.value, store.state.token)
                 .then(response => {
                     if(response){
                         checks.value = response
