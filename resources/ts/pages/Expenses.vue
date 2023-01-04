@@ -67,11 +67,11 @@ export default defineComponent({
         }
 
         watch(month, () => {
-            getExpenses();
+            getExpenses()
         })
 
         onMounted(() => {
-            getExpenses();
+            getExpenses()
         });
 
         return {

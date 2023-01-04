@@ -109,10 +109,11 @@ export default defineComponent({
         }
 
         watch(month, () => {
+            getBalances()
         })
 
         onMounted(() => {
-            getBalances();
+            getBalances()
         });
 
         return {

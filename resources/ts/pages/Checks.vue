@@ -147,11 +147,11 @@ export default defineComponent({
 
 
         watch(month, () => {
-            getChecks();
+            getChecks()
         })
 
         onMounted(() => {
-            getChecks();
+            getChecks()
         });
 
         return {
