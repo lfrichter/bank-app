@@ -6,21 +6,51 @@ on:
       - master
 
 jobs:
-  deploy:
+  build:
     name: Deploy to EC2 on master branch push
     runs-on: ubuntu-latest
+    environment: production_environment
+
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    # permissions:
+    #   id-token: write
+    #   contents: read
 
     steps:
       - name: Checkout the files
         uses: actions/checkout@v2
 
-      # - name: Deploy to Server 1
-      #   uses: easingthemes/ssh-deploy@main
+      # - name: ls -a via ssh
+      #   uses: garygrossgarten/github-action-ssh@release
+      #   with:
+      #     command: ls -a
+      #     host: ${{ secrets.HOST_DNS }}
+      #     username: ubuntu
+      #     privateKey: ${{ secrets.EC2_SSH_KEY}}
+
+      # - name: Test
       #   env:
       #     SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
       #     REMOTE_HOST: ${{ secrets.HOST_DNS }}
-      #     REMOTE_USER: ${{ secrets.USERNAME }}
-      #     TARGET: ${{ secrets.TARGET_DIR }}
+      #   run: |
+      #     echo "SSH_PRIVATE_KEY"
+      #     echo ${#SSH_PRIVATE_KEY}
+      #     echo "REMOTE_HOST"
+      #     echo ${#REMOTE_HOST}
+      #     echo "SSH_PRIVATE_KEY"
+      #     echo "$SSH_PRIVATE_KEY"
+      #     echo "REMOTE_HOST"
+      #     echo "$REMOTE_HOST"
+
+      - name: Deploy to Server 1
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          SOURCE: "./"
+          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          TARGET: ${{ secrets.TARGET_DIR }}
+          # ARGS: "-rltgoDzvO"
 
       # - name: Wipe Project Dir
       #   uses: garygrossgarten/github-action-ssh@release
@@ -31,6 +61,7 @@ jobs:
       #     passphrase: ${{secrets.SSH_PASSWORD}}
       #     privateKey: ${{secrets.SSH_PRIVATE_KEY}}
       #     port: ${{secrets.SSH_PORT}}
+
       # - name: FTP Deploy API
       #   uses: kevinpainchaud/simple-ftp-deploy-action@v1.1.0
       #   with:
@@ -41,12 +72,42 @@ jobs:
       #     dist_target_dir: "/laravel-app"
       #     delete: "false"
       #     exclude: "'^tests/'"
-      - name: Run Post Deploy Script
-        uses: garygrossgarten/github-action-ssh@release
-        with:
-          command: cd /var/www/bank; chmod 755 ./start.sh; chmod o+x ./start.sh; ./start.sh; exit;
-          host: ${{secrets.SSH_HOST}}
-          username: ${{secrets.SSH_USERNAME}}
-          passphrase: ${{secrets.SSH_PASSWORD}}
-          privateKey: ${{secrets.SSH_PRIVATE_KEY}}
-          port: ${{secrets.SSH_PORT}}
+
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: us-east-1
+
+      # - name: Deploying with CodeDeploy
+      #   id: a-task
+      #   env:
+      #     an-environment-variable: anything you want
+      #   run: |
+      #     echo "Your CLI code should be placed here"
+
+      # - name: Run Post Deploy Script
+      #   # uses: garygrossgarten/github-action-ssh@release
+      #   uses: easingthemes/ssh-deploy@main
+      #   env:
+      #     SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+      #     REMOTE_HOST: ${{ secrets.HOST_DNS }}
+      #     REMOTE_USER: ${{ secrets.USERNAME }}
+      #     TARGET: ${{ secrets.TARGET_DIR }}
+      #     REMOTE_PORT: 22
+      #     # SCRIPT: cd /var/www/bank; chmod 755 ./start.sh; chmod o+x ./start.sh; ./start.sh; exit;
+      #     # EXCLUDE: "/dist/, /node_modules/"
+
+      # - run: cd /var/www/bank; chmod 755 ./start.sh; chmod o+x ./start.sh; ./start.sh;
+
+      #
+      # - name: rsync deployments
+      #   uses: burnett01/rsync-deployments@5.1
+      #   with:
+      #     switches: -avzr --delete
+      #     path: ./*
+      #     remote_path: /var/www/bank/
+      #     remote_host: <host>.compute.amazonaws.com
+      #     remote_user: ubuntu
+      #     remote_key: "${{ secrets.EC2_SSH_KEY }}"
